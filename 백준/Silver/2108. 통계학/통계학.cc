@@ -21,7 +21,7 @@ int main(void)
 	
 	int sum = 0;
 	vector<int> arr;
-	map<int, int> mp;
+	unordered_map<int, int> mp;
 	for (int i = 0; i < K; i++)
 	{
 		int temp;
