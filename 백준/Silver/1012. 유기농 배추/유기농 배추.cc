@@ -41,8 +41,8 @@ int main(void)
 
 	while (T--)
 	{
-		memset(arr, 0, n * n * sizeof(int));
-		memset(visited, 0, n * n * sizeof(int));
+		memset(arr, 0, sizeof(arr));
+		memset(visited, 0, sizeof(visited));
 		cnt = 0;
 		cin >> M >> N >> K;
 
