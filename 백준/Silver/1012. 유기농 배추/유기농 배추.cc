@@ -41,8 +41,8 @@ int main(void)
 
 	while (T--)
 	{
-		fill(&arr[0][0], &arr[0][0] + 51 * 51, 0);
-		fill(&visited[0][0], &visited[0][0] + 51 * 51, 0);
+		memset(arr, 0, n * n * sizeof(int));
+		memset(visited, 0, n * n * sizeof(int));
 		cnt = 0;
 		cin >> M >> N >> K;
 
