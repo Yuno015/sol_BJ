@@ -5,8 +5,8 @@ using namespace std;
 int main(void)
 {
 	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(0);
+	cout.tie(0);
 
 	string str;
 	while (1)
@@ -15,57 +15,41 @@ int main(void)
 		if (str == ".")
 			break;
 
-		stack<char> s;
 		int len = str.length();
-		bool isOK = true;
+		stack<char> s;
+		bool flag = true;
+
 		for (int i = 0; i < len; i++)
 		{
-			if (str[i] == '(' || str[i] == '[')
+			if (str[i] == '[' || str[i] == '(')
 			{
 				s.push(str[i]);
 			}
-			else if (str[i] == ')')
-			{
-				if (!s.empty())
-				{
-					char temp = s.top();
-					if (temp != '(')
-					{
-						isOK = false;
-						break;
-					}
-					s.pop();
-				}
-				else
-				{
-					isOK = false;
-					break;
-				}
-			}
 			else if (str[i] == ']')
 			{
-				if (!s.empty())
+				if (s.empty() || s.top() != '[')
 				{
-					char temp = s.top();
-					if (temp != '[')
-					{
-						isOK = false;
-						break;
-					}
-					s.pop();
-				}
-				else
-				{
-					isOK = false;
+					flag = false;
 					break;
 				}
+				else
+					s.pop();
+			}
+			else if (str[i] == ')')
+			{
+				if (s.empty() || s.top() != '(')
+				{
+					flag = false;
+					break;
+				}
+				else
+					s.pop();
 			}
 		}
-		if (s.empty() && isOK)
-			cout << "yes" << "\n";
+		if (flag == true && s.empty())
+			cout << "yes\n";
 		else
-			cout << "no" << "\n";
+			cout << "no\n";
 	}
-
 	return 0;
 }
