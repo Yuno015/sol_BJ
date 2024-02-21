@@ -2,34 +2,27 @@
 
 using namespace std;
 
+int arr[100004];
+int psum[100004];
+
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
 	int N, K;
 	cin >> N >> K;
 
-	int max = INT_MIN;
-	queue<int> q;
-	int sum = 0;
-	for (int i = 0; i < N; i++)
+	memset(psum, 0, sizeof(psum));
+	for (int i = 1; i <= N; i++)
 	{
-		int temp;
-		cin >> temp;
-		q.push(temp);
-		sum += temp;
-		
-		if (q.size() == K)
-		{
-			if (sum > max)
-				max = sum;
-			sum -= q.front();
-			q.pop();
-		}
+		cin >> arr[i];
+		psum[i] = psum[i - 1] + arr[i];
 	}
 
-	cout << max << "\n";
+	vector<int> ret;
+	for (int i = K; i <= N; i++)
+	{
+		ret.push_back(psum[i] - psum[i - K]);
+	}
+
+	cout << *max_element(ret.begin(), ret.end()) << '\n';
 	return 0;
 }

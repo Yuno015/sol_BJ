@@ -4,11 +4,15 @@
 
 ### 성능 요약
 
-메모리: 2284 KB, 시간: 8 ms
+메모리: 3580 KB, 시간: 28 ms
 
 ### 분류
 
 누적 합, 슬라이딩 윈도우, 두 포인터
+
+### 제출 일자
+
+2024년 2월 21일 20:07:32
 
 ### 문제 설명
 
@@ -26,7 +30,7 @@
 
 <p>또 다른 예로 위와 같은 온도가 주어졌을 때, 모든 연속적인 5일 간의 온도의 합은 아래와 같으며, </p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/cb8d846c-2f90-475a-8901-1fb69de87397/-/preview/" style="height: 80px; width: 259px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="height: 80px; width: 259px;"></p>
 
 <p>이때, 온도의 합이 가장 큰 값은 31이다.</p>
 
