@@ -4,37 +4,35 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-	int N;
-	cin >> N;
+	int n;
+	cin >> n;
 
-	int cnt = 0;
-	while (N--)
+	int ret = 0;
+	for (int i = 0; i < n; i++)
 	{
-		string input;
-		cin >> input;
-
-		int len = input.length();
-		stack<char> s;
-		s.push(input[0]);
-		for (int i = 1; i < len; i++)
+		string s;
+		cin >> s;
+		if (s.length() % 2 != 0) continue;
+		else
 		{
-			if (s.empty())
-				s.push(input[i]);
-			else
+			stack<char> st;
+			for (int j = 0; j < s.length(); j++)
 			{
-				if (s.top() == input[i])
-					s.pop();
+				if (st.empty()) st.push(s[j]);
 				else
-					s.push(input[i]);
+				{
+					if (st.top() == s[j]) st.pop();
+					else st.push(s[j]);
+				}
 			}
+			if (st.empty()) ret++;
 		}
-		if (s.empty())
-			cnt++;
 	}
-	cout << cnt << "\n";
+
+	cout << ret << '\n';
 	return 0;
 }
