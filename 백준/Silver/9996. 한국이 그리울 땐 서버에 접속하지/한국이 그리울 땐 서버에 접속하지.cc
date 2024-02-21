@@ -4,34 +4,37 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
 	cin >> n;
 
-	string base;
-	cin >> base;
+	string s;
+	cin >> s;
 
-	auto temp = base.find("*");
-	string bf = base.substr(0, temp);
-	base.erase(0, temp + 1);
-	
-	int bfLen = bf.length();
-	int beLen = base.length();
+	int pos = s.find('*');
+	string front = s.substr(0, pos);
+	string back = s.substr(pos + 1);
+	reverse(back.begin(), back.end());
 
-	while (n--)
+	for (int i = 0; i < n; i++)
 	{
-		string s;
-		cin >> s;
+		string tmp;
+		cin >> tmp;
 
-		int len = s.length();
-		if (len >= bfLen+ beLen && s.substr(0, bfLen) == bf && s.substr(len - beLen, beLen) == base)
-			cout << "DA\n";
+		if (front.size() + back.size() > tmp.size()) cout << "NE\n";
 		else
-			cout << "NE\n";
+		{
+			int len_f = front.length();
+			int len_b = back.length();
+
+			string tmp_f = tmp.substr(0, len_f);
+			reverse(tmp.begin(), tmp.end());
+			string tmp_b = tmp.substr(0, len_b);
+
+
+			if (tmp_f == front && tmp_b == back) cout << "DA\n";
+
+			else cout << "NE\n";
+		}
 	}
-	
 	return 0;
 }
