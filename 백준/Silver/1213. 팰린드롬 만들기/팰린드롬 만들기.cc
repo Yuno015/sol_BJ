@@ -2,69 +2,54 @@
 
 using namespace std;
 
-int arr[30];
+const int NUM = 26;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-	string input;
-	cin >> input;
+	string s;
+	cin >> s;
 
-	int len = input.length();
-	string answer = "";
+	int arr[NUM];
+	memset(arr, 0, sizeof(arr));
 
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i < s.length(); i++)
 	{
-		arr[input[i] - 'A']++;
+		arr[s[i] - 'A']++;
 	}
 
-	int isOdd = 0;
-	for (int i = 0; i < 26; i++)
+	int odd = 0;
+	for (int i = 0; i < NUM; i++)
 	{
-		if (arr[i] % 2 != 0)
-			isOdd++;
+		if (arr[i] % 2 != 0) odd++;
 	}
 
-	char odd = '!';
-	queue<char> q;
-	stack<char> s;
-	if (isOdd > 1 || (len % 2 == 0 && isOdd != 0))
-		answer = "I'm Sorry Hansoo";
+	if (odd > 1) cout << "I'm Sorry Hansoo\n";
 	else
 	{
-		for (int i = 0; i < 26; i++)
+		string one = "";
+		string ret = "";
+		for (int i = 0; i < NUM; i++)
 		{
-			if (arr[i] % 2 != 0)
+			if (arr[i] % 2 == 1)
 			{
-				odd = i + 'A';
+				one += i + 'A';
 				arr[i]--;
 			}
 			while (arr[i] != 0)
 			{
-				q.push(i + 'A');
-				arr[i]--;
+				ret += i + 'A';
+				arr[i] -= 2;
 			}
 		}
-		int qSize = q.size();
-		for (int i = 0; i < qSize / 2; i++)
-		{
-			answer += q.front();
-			q.pop();
-			s.push(q.front());
-			q.pop();
-		}
-		if (odd != '!')
-			answer += odd;
-		int sSize = s.size();
-		for (int i = 0; i < sSize; i++)
-		{
-			answer += s.top();
-			s.pop();
-		}
+		string back = ret;
+		reverse(back.begin(), back.end());
+		ret = ret + one + back;
+
+		cout << ret << '\n';
 	}
-	cout << answer << "\n";
 	return 0;
 }
