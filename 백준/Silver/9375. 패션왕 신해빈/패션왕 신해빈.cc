@@ -4,41 +4,35 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-	int N;
-	cin >> N;
+	int t;
+	cin >> t;
 
-	while (N--)
+	while (t--)
 	{
 		int n;
 		cin >> n;
 
-		unordered_map<string, int> mp;
-		while (n--)
+		map<string, int> mp;
+		for (int i = 0; i < n; i++)
 		{
-			string name, category;
-			cin >> name >> category;
-			if (mp.find(category) != mp.end())
-			{
-				auto iter = mp.find(category);
-				iter->second++;
-			}
-			else
-			{
-				mp.insert(make_pair(category, 1));
-			}
-		}
-		vector<pair<string, int>> arr(mp.begin(), mp.end());
-		long long result = 1;
-		for (int i = 0; i < arr.size(); i++)
-		{
-			result *= (arr[i].second + 1);
+			string a, b;
+			cin >> a >> b;
+			auto iter = mp.find(b);
+			if (iter != mp.end()) iter->second++;
+			else mp.insert({ b, 1 });
 		}
 
-		cout << result - 1 << "\n";
+		int ret = 1;
+		for (auto iter = mp.begin(); iter != mp.end(); iter++)
+		{
+			ret *= (iter->second) + 1;
+		}
+
+		cout << ret - 1 << '\n';
 	}
 	return 0;
 }
