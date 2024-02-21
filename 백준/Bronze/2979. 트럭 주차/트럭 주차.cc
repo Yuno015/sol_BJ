@@ -2,39 +2,34 @@
 
 using namespace std;
 
-int arr[105];
-
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
 	int A, B, C;
+	int arr[105];
+	int sum = 0;
+
+	memset(arr, 0, sizeof(arr));
+
 	cin >> A >> B >> C;
 
 	for (int i = 0; i < 3; i++)
 	{
-		int a, l;
-		cin >> a >> l;
-		for (int j = a; j < l; j++)
+		int in, out;
+		cin >> in >> out;
+
+		for (int j = in; j < out; j++)
 		{
 			arr[j]++;
 		}
 	}
 
-	int sum = 0;
-	for (int i = 1; i <= 100; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		if (arr[i] == 1)
-			sum += (arr[i] * A);
-		else if (arr[i] == 2)
-			sum += (arr[i] * B);
-		else if (arr[i] == 3)
-			sum += (arr[i] * C);
+		if (arr[i] == 1) sum += A;
+		else if (arr[i] == 2) sum += (2 * B);
+		else if (arr[i] == 3) sum += (3 * C);
 	}
 
-	cout << sum << "\n";
-
+	cout << sum << '\n';
 	return 0;
 }
