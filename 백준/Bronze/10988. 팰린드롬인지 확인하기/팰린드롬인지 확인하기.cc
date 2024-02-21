@@ -1,23 +1,24 @@
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main(void)
 {
-	string str;
-	bool pd = true;
-
-	cin >> str;
-
-	int len = str.length();
+	bool isP = true;
+	string s;
+	cin >> s;
+	int len = s.length();
 
 	for (int i = 0; i < len / 2; i++)
 	{
-		if (str[i] != str[len - 1 - i])
-			pd = false;
+		if (s[i] != s[len - (i + 1)])
+		{
+			isP = false;
+			break;
+		}
 	}
-	cout << pd << endl;
 
+	if (isP) cout << 1;
+	else cout << 0;
 	return 0;
 }
