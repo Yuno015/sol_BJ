@@ -2,26 +2,24 @@
 
 using namespace std;
 
-int arr[30];
-
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
+	int arr[26];
 	string s;
+
 	cin >> s;
 
-	int len = s.length();
-	for (int i = 0; i < len; i++)
+	memset(arr, 0, sizeof(arr));
+	for (int i = 0; i < s.length(); i++)
 	{
-		arr[s[i] - 'a']++;
+		int n = s[i] - 'a';
+		arr[n]++;
 	}
 
 	for (int i = 0; i < 26; i++)
 	{
 		cout << arr[i] << " ";
 	}
+
 	return 0;
 }
