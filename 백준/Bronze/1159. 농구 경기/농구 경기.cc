@@ -2,33 +2,29 @@
 
 using namespace std;
 
-int arr[30];
-
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
 	int n;
 	cin >> n;
+	int arr[26];
 
-	while (n--)
+	memset(arr, 0, sizeof(arr));
+
+	for (int i = 0; i < n; i++)
 	{
 		string s;
 		cin >> s;
+
 		arr[s[0] - 'a']++;
 	}
-	int cnt = 0;
+
+	string ret = "";
 	for (int i = 0; i < 26; i++)
 	{
-		if (arr[i] >= 5)
-		{
-			cout << char('a' + i);
-			cnt++;
-		}
+		if (arr[i] >= 5) ret += ('a' + i);
 	}
-	if (cnt == 0)
-		cout << "PREDAJA\n";
+
+	if (ret == "") cout << "PREDAJA";
+	else cout << ret;
 	return 0;
 }
