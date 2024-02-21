@@ -4,30 +4,24 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
 	int N, M;
 	cin >> N >> M;
-	
-	set<int> jr;
-	vector<int> arr;
+
+	set<int> s;
+	int ret = 0;
 	for (int i = 0; i < N; i++)
 	{
-		int temp;
-		cin >> temp;
-		jr.insert(temp);
-		arr.push_back(temp);
+		int tmp;
+		cin >> tmp;
+
+		if (s.find(M - tmp) != s.end()) ret++;
+		else s.insert(tmp);
 	}
-	
-	int cnt = 0;
-	for (int i = 0; i < arr.size(); i++)
-	{
-		if (jr.count(M - arr[i]) != 0)
-			cnt++;
-	}
-	
-	cout << cnt/2 << "\n";
+
+	cout << ret << '\n';
 	return 0;
 }
