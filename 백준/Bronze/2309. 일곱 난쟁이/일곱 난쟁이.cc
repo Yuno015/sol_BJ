@@ -2,62 +2,39 @@
 
 using namespace std;
 
-vector<vector<int>> owari;
-
-void combi(int start, vector<int> v)
-{
-	if (v.size() == 7)
-	{
-		owari.push_back(v);
-		return;
-	}
-	for (int i = start + 1; i < 9; i++)
-	{
-		v.push_back(i);
-		combi(i, v);
-		v.pop_back();
-	}
-	return;
-}
-
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-	vector<int> arr;
+	vector<int> v;
+
 	for (int i = 0; i < 9; i++)
 	{
 		int temp;
 		cin >> temp;
-		arr.push_back(temp);
+		v.push_back(temp);
 	}
-	vector<int> v;
-	combi(-1, v);
+	sort(v.begin(), v.end());
+	int sum = accumulate(v.begin(), v.end(), 0);
 
-	vector<int> result;
-	for (int i = 0; i < owari.size(); i++)
+	for (int i = 0; i < 8; i++)
 	{
-		int sum = 0;
-		for (int j = 0; j < owari[i].size(); j++)
+		for (int j = i + 1; j < 9; j++)
 		{
-			sum += arr[owari[i][j]];
-		}
-		if (sum == 100)
-		{
-			for (int j = 0; j < owari[i].size(); j++)
+			if (v[i] + v[j] == (sum - 100))
 			{
-				result.push_back(arr[owari[i][j]]);
+				for (int k = 0; k < v.size(); k++)
+				{
+					if (k == i || k == j) continue;
+					cout << v[k] << "\n";
+				}
+				goto END;
 			}
-			break;
 		}
 	}
-	sort(result.begin(), result.end());
-	for (int i = 0; i < result.size(); i++)
-	{
-		cout << result[i] << "\n";
-	}
+END:
 
 	return 0;
 }
