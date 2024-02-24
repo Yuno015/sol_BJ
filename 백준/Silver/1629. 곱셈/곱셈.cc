@@ -2,32 +2,43 @@
 
 using namespace std;
 
-typedef long long ll;
-
-ll A, B, C;
-
-ll go(ll a, ll b)
-{
-	if (b == 1)
-		return a % C;
-
-	ll ret = go(a, b / 2);
-	ret = (ret * ret) % C;
-	if (b % 2)
-		ret = (ret * a) % C;
-
-	return ret;
-}
-
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-	
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	long long A, B, C;
 	cin >> A >> B >> C;
 
-	cout << go(A, B) << "\n";
+	vector<int> v;
+	while (B > 0)
+	{
+		v.push_back(B);
+		B /= 2;
+	}
 
+	sort(v.begin(), v.end());
+	
+	//for (int i : v) cout << i << " ";
+	//cout << "\n";
+
+	long long ret = A % C;
+	long long f = A % C;
+	for (int i = 1; i < v.size(); i++)
+	{
+		if (v[i] == v[i - 1] * 2)
+		{
+			ret = (ret * ret) % C;
+			//cout << "Same " << ret << "\n";
+		}
+		else
+		{
+			ret = (ret * ((ret * f) % C)) % C;
+			//cout << "Diff " << ret << "\n";
+		}
+	}
+
+	cout << ret << "\n";
 	return 0;
 }
