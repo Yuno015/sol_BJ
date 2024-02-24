@@ -2,32 +2,30 @@
 
 using namespace std;
 
-
-
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
 	int n;
 	while (cin >> n)
 	{
-		int ans = 1;
-		unsigned long long sum = 1;
-		int k = 1;
+		long long sum = 1;
+		int cnt = 1;
+		long long before = 1;
 		while (1)
 		{
 			if (sum % n == 0)
 			{
-				cout << ans << "\n";
+				cout << cnt << "\n";
 				break;
 			}
-			k = (k * 10) % n;
-			sum += k;
-			ans++;
+			before = (before * 10) % n;
+			sum += before;
+			sum %= n;
+			cnt++;
 		}
 	}
-
-	return 0; 
+	return 0;
 }
