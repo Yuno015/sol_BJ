@@ -2,32 +2,31 @@
 
 using namespace std;
 
-const int n = 101;
-int arr[n][n];
-int visited[n][n];
-int cnt = 0;
-
-const int dy[] = { -1, 0, 1, 0 };
-const int dx[] = { 0, 1, 0, -1 };
-
 int M, N, K;
-int sy, sx, ey, ex;
+int arr[104][104];
+int visited[104][104];
+int tmp;
+vector<int> ret;
 
-void DFS(int y, int x)
+const int dy[] = { -1,0,1,0 };
+const int dx[] = { 0,1,0,-1 };
+
+void dfs(int y, int x)
 {
-	visited[y][x] = cnt;
-
-	for (int i = 0; i < 4; i++)
+	visited[y][x] = 1;
+	tmp++;
+	for(int i=0;i<4;i++)
 	{
 		int ny = y + dy[i];
 		int nx = x + dx[i];
 
-		if (ny < 0 || ny >= M || nx < 0 || nx >= N) continue;
-		if (visited[ny][nx] == 0 && arr[ny][nx] == 0)
+		if (ny < 0 || nx < 0 || ny >= M || ny >= N) continue;
+		if (arr[ny][nx] == 1 && visited[ny][nx] == 0)
 		{
-			DFS(ny, nx);
+			dfs(ny, nx);
 		}
 	}
+
 	return;
 }
 
@@ -35,15 +34,24 @@ int main(void)
 {
 	cin >> M >> N >> K;
 
-	for (int i = 0; i < K; i++)
+	for (int i = 0; i < M; i++)
 	{
+		for (int j = 0; j < N; j++)
+		{
+			arr[i][j] = 1;
+		}
+	}
+
+	while (K--)
+	{
+		int sx, sy, ex, ey;
 		cin >> sx >> sy >> ex >> ey;
 
-		for (int j = sy; j < ey; j++)
+		for (int i = sy; i < ey; i++)
 		{
-			for (int k = sx; k < ex; k++)
+			for (int j = sx; j < ex; j++)
 			{
-				arr[j][k] = 1;
+				arr[i][j] = 0;
 			}
 		}
 	}
@@ -52,34 +60,22 @@ int main(void)
 	{
 		for (int j = 0; j < N; j++)
 		{
-			if (visited[i][j] == 0 && arr[i][j] == 0)
+			if (arr[i][j] == 1 && visited[i][j] == 0)
 			{
-				cnt++;
-				DFS(i, j);
+				tmp = 0;
+				dfs(i, j);
+				ret.push_back(tmp);
 			}
 		}
 	}
 
-	cout << cnt << "\n";
+	sort(ret.begin(), ret.end());
 
-	vector<int> v(cnt);
+	cout << ret.size() << "\n";
+	for (int i = 0; i < ret.size(); i++)
+	{
+		cout << ret[i] << " ";
+	}
 
-	for (int i = 0; i < M; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			if (visited[i][j] != 0)
-			{
-				v[visited[i][j] - 1]++;
-			}
-		}
-	}
-	sort(v.begin(), v.end());
-	for (int i = 0; i < v.size(); i++)
-	{
-		cout << v[i] << " ";
-	}
-	cout << "\n";
-	
 	return 0;
 }
