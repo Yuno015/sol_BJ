@@ -2,13 +2,9 @@
 
 using namespace std;
 
-bool cmp(const pair<int, pair<int, int>>& a, const pair<int, pair<int, int>>& b)
+bool cmp(const pair<int, int>& a, const pair<int, int>& b)
 {
-	if (a.second.first == b.second.first)
-	{
-		return a.second.second < b.second.second;
-	}
-	return a.second.first > b.second.first;
+	return a.second > b.second;
 }
 
 int main(void)
@@ -16,32 +12,42 @@ int main(void)
 	int N, C;
 	cin >> N >> C;
 
-	unordered_map<int, pair<int, int>> mp;
-	
+	map<int, int> mp;
+	vector<pair<int, int>> v;
+
 	for (int i = 0; i < N; i++)
 	{
-		int temp;
-		cin >> temp;
+		int tmp;
+		cin >> tmp;
 
-		auto iter = mp.find(temp);
+		auto iter = mp.find(tmp);
 		if (iter != mp.end())
 		{
-			iter->second.first++;
+			iter->second++;
+			for (int j = 0; j < v.size(); j++)
+			{
+				if (v[j].first == iter->first)
+				{
+					v[j].second++;
+				}
+			}
 		}
 		else
 		{
-			mp.insert(make_pair(temp, make_pair(1, i)));
+			mp.insert({ tmp, 1 });
+			v.push_back({ tmp, 1 });
 		}
 	}
-	vector<pair<int, pair<int, int>>> arr(mp.begin(), mp.end());
-	sort(arr.begin(), arr.end(), cmp);
 
-	for (int i = 0; i < arr.size(); i++)
+	stable_sort(v.begin(), v.end(), cmp);
+
+	for (int i = 0; i < v.size(); i++)
 	{
-		for (int j = 0; j < arr[i].second.first; j++)
+		for (int j = 0; j < v[i].second; j++)
 		{
-			cout << arr[i].first << " ";
+			cout << v[i].first << " ";
 		}
 	}
+	cout << "\n";
 	return 0;
 }
