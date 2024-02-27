@@ -1,35 +1,35 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-const int n = 66;
 int N;
-int arr[n][n];
+char arr[66][66];
 
-string QDtree(int y, int x, int size)
+string quadTreeRecur(int y, int x, int n)
 {
-	if (size == 1)
+	if (n == 1)
 	{
-		return to_string(arr[y][x]);
+		string ret = "";
+		ret += arr[y][x];
+		return ret;
 	}
-	string s1 = QDtree(y, x, size / 2);
-	string s2 = QDtree(y, x + size / 2, size / 2);
-	string s3 = QDtree(y + size / 2, x, size / 2);
-	string s4 = QDtree(y + size / 2, x + size / 2, size / 2);
-
+	
 	string ret = "";
-	if ((s1 == "0" || s1 == "1") && s1 == s2 && s2 == s3 && s3 == s4)
-	{
-		ret = s1;
-	}
+	string a = quadTreeRecur(y, x, n/2);
+	string b = quadTreeRecur(y, x + n/2, n/2);
+	string c = quadTreeRecur(y + n/2, x, n/2);
+	string d = quadTreeRecur(y + n/2, x + n/2, n/2);
+
+	if (a == b && b == c && c == d && (a == "0" || a == "1")) ret += a;
 	else
 	{
-		ret = "(" + s1 + s2 + s3 + s4 + ")";
+		ret += "(";
+		ret += (a + b + c + d);
+		ret += ")";
 	}
 
 	return ret;
 }
-
 
 int main(void)
 {
@@ -37,13 +37,18 @@ int main(void)
 
 	for (int i = 0; i < N; i++)
 	{
-		for (int j = 0; j < N; j++)
+		string s;
+		cin >> s;
+
+		for (int j = 0; j < s.size(); j++)
 		{
-			scanf("%1d", &arr[i][j]);
+			arr[i][j] = s[j];
 		}
 	}
 
-	string ret = QDtree(0, 0, N);
+	string ret = quadTreeRecur(0, 0, N);
+
 	cout << ret << "\n";
+	
 	return 0;
 }
