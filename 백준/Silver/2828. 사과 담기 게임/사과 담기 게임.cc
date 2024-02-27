@@ -2,35 +2,36 @@
 
 using namespace std;
 
-int M, N, J;
-
 int main(void)
 {
+	int M, N, J;
+	int cur = 1;
+	int ret = 0;
+
 	cin >> N >> M;
 	cin >> J;
 
-	int idx = 1;
-	int cnt = 0;
-
 	for (int i = 0; i < J; i++)
 	{
-		int f;
-		cin >> f;
+		int pos;
+		cin >> pos;
 
-		if (f >= idx && f < idx + M)
+		if (pos >= cur && pos < (cur + M))
+		{
 			continue;
-		if (f < idx)
-		{
-			cnt += idx - f;
-			idx = f;
 		}
-		else if (f >= idx + M)
+		else if (pos < cur)
 		{
-			cnt += f - (idx + M) + 1;
-			idx = f - M + 1;
+			ret += (cur - pos);
+			cur = pos;
+		}
+		else
+		{
+			ret += (pos - (cur + M - 1));
+			cur = pos - M + 1;
 		}
 	}
 
-	cout << cnt << "\n";
+	cout << ret << "\n";
 	return 0;
 }
