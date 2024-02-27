@@ -2,61 +2,101 @@
 
 using namespace std;
 
-bool isMoeum(char c)
+bool moeum(string s)
 {
-	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
-		return true;
-	else
-		return false;
+	bool ret = false;
+	for (int i = 0; i < s.length(); i++)
+	{
+		if (s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
+		{
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+bool twoA(string s)
+{
+	bool ret = true;
+
+	for (int i = 0; i < s.size() - 1; i++)
+	{
+		if (s[i] == s[i + 1])
+		{
+			if (s[i] == 'o' || s[i] == 'e') continue;
+			ret = false;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+bool isM(char c)
+{
+	bool ret = false;
+
+	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') ret = true;
+
+	return ret;
+}
+
+bool threeA(string s)
+{
+	bool ret = false;
+
+	for (int i = 0; i < s.size() - 2; i++)
+	{
+		bool a = isM(s[i]);
+		bool b = isM(s[i + 1]);
+		bool c = isM(s[i + 2]);
+
+		if (a == b && b == c)
+		{
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+void acceptable(string s)
+{
+	cout << "<" << s << ">" << " is acceptable.\n";
+}
+
+void na(string s)
+{
+	cout << "<" << s << ">" << " is not acceptable.\n";
 }
 
 int main(void)
 {
+	string s;
 	while (1)
 	{
-		string temp;
-		cin >> temp;
+		cin >> s;
 
-		if (temp == "end")
-			break;
+		if (s == "end") break;
 
-		int len = temp.length();
-		int cnt = 0;
-		bool P = true;
-
-		stack<char> s;
-		for (int i = 0; i < len; i++)
+		if (s.length() == 1)
 		{
-			if (temp[i] == 'a' || temp[i] == 'e' || temp[i] == 'i' || temp[i] == 'o' || temp[i] == 'u')
-			{
-				cnt++;
-			}
+			if (moeum(s) == true) acceptable(s);
+			else na(s);
 		}
-		for (int i = 0; i < len - 2; i++)
+		else if (s.length() == 2)
 		{
-			bool zero = isMoeum(temp[i]);
-			bool one = isMoeum(temp[i + 1]);
-			bool two = isMoeum(temp[i + 2]);
-			
-			if (zero == one && one == two)
-			{
-				P = false;
-				break;
-			}
+			if (moeum(s) == true && twoA(s) == true) acceptable(s);
+			else na(s);
 		}
-		for (int i = 0; i < len - 1; i++)
+		else
 		{
-			if (temp[i] == temp[i + 1] && temp[i] != 'e' && temp[i] != 'o')
-			{
-				P = false;
-				break;
-			}
+			if (moeum(s) == true && twoA(s) == true && threeA(s) == false) acceptable(s);
+			else na(s);
 		}
-		cout << "<" << temp << "> is ";
-		if (cnt == 0 || P == false)
-			cout << "not ";
-		cout << "acceptable.\n";
-			
 	}
 	return 0;
 }
