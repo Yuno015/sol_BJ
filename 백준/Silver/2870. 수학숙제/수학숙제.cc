@@ -4,10 +4,8 @@ using namespace std;
 
 bool cmp(string& a, string& b)
 {
-	if (a.length() == b.length())
-	{
-		return a < b;
-	}
+	if (a.length() == b.length()) return a < b;
+
 	return a.length() < b.length();
 }
 
@@ -16,57 +14,51 @@ int main(void)
 	int N;
 	cin >> N;
 
-	multiset<string> s;
-	for (int i = 0; i < N; i++)
+	vector<string> v;
+	
+	while (N--)
 	{
-		string tmp;
-		cin >> tmp;
-
-		int len = tmp.length();
-		string temp = "";
+		string s;
+		cin >> s;
 		
-		for (int j = 0; j < len; j++)
+		string tmp = "";
+		for (int i = 0; i < s.length(); i++)
 		{
-			if (tmp[j] >= 'a' && tmp[j] <= 'z')
+			if (s[i] >= '0' && s[i] <= '9')
 			{
-				if (temp != "")
-				{
-					if (temp.length() > 1 && temp[0] == '0')
-					{
-						while (temp[0] == '0' && temp.length() > 1)
-						{
-							temp.erase(temp.begin());
-						}
-					}
-					s.insert(temp);
-					temp = "";
-				}
+				tmp += s[i];
 			}
 			else
 			{
-				temp += tmp[j];
-			}
-			if (j == len - 1)
-			{
-				if (temp != "")
+				if (tmp == "") continue;
+				else
 				{
-					if (temp.length() > 1 && temp[0] == '0')
-					{
-						while (temp[0] == '0' && temp.length() > 1)
-						{
-							temp.erase(temp.begin());
-						}
-					}
-					s.insert(temp);
+					v.push_back(tmp);
+					tmp = "";
 				}
 			}
 		}
+		if (tmp != "") v.push_back(tmp);
 	}
-	vector<string> arr(s.begin(), s.end());
-	sort(arr.begin(), arr.end(), cmp);
-	for (int i = 0; i < arr.size(); i++)
+
+	for (int i = 0; i < v.size(); i++)
 	{
-		cout << arr[i] << "\n";
+		if (v[i][0] == '0')
+		{
+			while (v[i][0] == '0')
+			{
+				if (v[i].length() == 1) break;
+				v[i].erase(0, 1);
+			}
+		}
 	}
+
+	sort(v.begin(), v.end(), cmp);
+
+	for (int i = 0; i < v.size(); i++)
+	{
+		cout << v[i] << "\n";
+	}
+	
 	return 0;
 }
