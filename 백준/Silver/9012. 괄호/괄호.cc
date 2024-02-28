@@ -4,41 +4,39 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+	
+	int T;
+	cin >> T;
 
-	int N;
-	cin >> N;
-
-	while (N--)
+	while (T--)
 	{
-		string str;
-		cin >> str;
+		string s;
+		cin >> s;
 
-		int len = str.length();
-		stack<char> s;
+		stack<char> st;
 		bool flag = true;
-		for (int i = 0; i < len; i++)
+		for (int i = 0; i < s.length(); i++)
 		{
-			if (str[i] == '(')
-				s.push(str[i]);
+			if (s[i] == '(') st.push(s[i]);
 			else
 			{
-				if (s.empty())
+				if (st.empty())
 				{
 					flag = false;
 					break;
 				}
-				s.pop();
+				else
+				{
+					st.pop();
+				}
 			}
 		}
-		if (flag == true && s.empty())
-		{
-			cout << "YES\n";
-		}
-		else
-			cout << "NO\n";
+		if (!st.empty()) flag = false;
+
+		if (flag) cout << "YES\n";
+		else cout << "NO\n";
 	}
 	return 0;
 }
