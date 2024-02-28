@@ -4,27 +4,26 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);cout.tie(NULL);
+    
 	int T;
 	cin >> T;
-	
+
 	while (T--)
 	{
-		long long N;
-		cin >> N;
+		int tmp;
+		cin >> tmp;
 
-		long long tmp = 5;
-		long long cnt = 0;
-		while (N >= tmp)
+		int cnt = 0;
+		while (1)
 		{
-			cnt += (N / tmp);
-			tmp *= 5;
+			if (tmp == 0) break;
+			cnt += (tmp / 5);
+			tmp /= 5;
 		}
-
 		cout << cnt << "\n";
 	}
+
 	return 0;
 }
