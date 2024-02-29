@@ -4,52 +4,43 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-
-	string str;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+	
 	while (1)
 	{
-		getline(cin, str);
-		if (str == ".")
-			break;
+		string s;
+		getline(cin, s);
+		if (s == ".") break;
 
-		int len = str.length();
-		stack<char> s;
+		stack<char> st;
 		bool flag = true;
-
-		for (int i = 0; i < len; i++)
+		for (int i = 0; i < s.length(); i++)
 		{
-			if (str[i] == '[' || str[i] == '(')
+			if (s[i] == '(' || s[i] == '[') st.push(s[i]);
+			else if (s[i] == ')')
 			{
-				s.push(str[i]);
-			}
-			else if (str[i] == ']')
-			{
-				if (s.empty() || s.top() != '[')
+				if (st.empty() || st.top() != '(')
 				{
 					flag = false;
 					break;
 				}
-				else
-					s.pop();
+				else st.pop();
 			}
-			else if (str[i] == ')')
+			else if (s[i] == ']')
 			{
-				if (s.empty() || s.top() != '(')
+				if (st.empty() || st.top() != '[')
 				{
 					flag = false;
 					break;
 				}
-				else
-					s.pop();
+				else st.pop();
 			}
 		}
-		if (flag == true && s.empty())
-			cout << "yes\n";
-		else
-			cout << "no\n";
+		if (!st.empty()) flag = false;
+
+		if (flag) cout << "yes\n";
+		else cout << "no\n";
 	}
 	return 0;
 }
