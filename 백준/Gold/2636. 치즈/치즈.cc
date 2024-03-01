@@ -2,132 +2,101 @@
 
 using namespace std;
 
-int M, N;
-
-const int AIR = 9;
-const int MELT = 3;
-const int n = 105;
-
-int arr[n][n];
-int air_visited[n][n];
-int visited[n][n];
+int N, M;
+char arr[104][104];
+int air_visited[104][104];
+int before;
+int cnt = 0;
 
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
-int ret = 0;
-int cnt = 0;
 
-void DFS_air(int y, int x)			// 공기에 해당하는 부분을 AIR(9)로 바꾸기
+void dfs_Air(int y, int x)
 {
 	air_visited[y][x] = 1;
-	arr[y][x] = AIR;
+	arr[y][x] = 'A';
 
 	for (int i = 0; i < 4; i++)
 	{
 		int ny = y + dy[i];
 		int nx = x + dx[i];
 
-		if (ny < 0 || nx < 0 || ny >= M || nx >= N) continue;
-		if (arr[ny][nx] == 0 && air_visited[ny][nx] == 0)
-		{
-			DFS_air(ny, nx);
-		}
+		if (ny < 0 || nx < 0 || ny >= N || nx >= M) continue;
+		if (air_visited[ny][nx] == 0 && arr[ny][nx] == '0')
+			dfs_Air(ny, nx);
 	}
 }
 
-void DFS(int y, int x)			// 공기와 맞닿은 치즈 부분을 MELT(3) 으로 바꾸기
+int get_Cheese()
 {
-	visited[y][x] = 1;
-
-	for (int i = 0; i < 4; i++)
+	int ret = 0;
+	for (int i = 0; i < N; i++)
 	{
-		int ny = y + dy[i];
-		int nx = x + dx[i];
-
-		if (ny < 0 || nx < 0 || ny >= M || nx >= N) continue;
-		if (arr[y][x] == 1 && arr[ny][nx] == AIR)
+		for (int j = 0; j < M; j++)
 		{
-			arr[y][x] = MELT;
-		}
-		if (arr[ny][nx] == 1 && visited[ny][nx] == 0)
-		{
-			DFS(ny, nx);
+			if (arr[i][j] == '1')
+				ret++;
 		}
 	}
-}
 
-int Cheese()			// 남은 치즈조각 개수 구하기
-{
-	int c = 0;
-	for (int i = 0; i < M; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			if (arr[i][j] == 1)
-				c++;
-		}
-	}
-	return c;
-}
-
-void Melt()			// 공기와 맞닿은 치즈 부분 녹이기 (MELT -> AIR)
-{
-	for (int i = 0; i < M; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			if (arr[i][j] == MELT)
-				arr[i][j] = AIR;
-		}
-	}
+	return ret;
 }
 
 int main(void)
 {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
 
-	cin >> M >> N;
-	for (int i = 0; i < M; i++)
+	cin >> N >> M;
+
+	for (int i = 0; i < N; i++)
 	{
-		for (int j = 0; j < N; j++)
+		for (int j = 0; j < M; j++)
 		{
 			cin >> arr[i][j];
-			if (i == 0 || j == 0 || i == M - 1 || j == N - 1)
-				arr[i][j] = AIR;
+			if (i == 0 || j == 0 || i == N - 1 || j == M - 1)
+				arr[i][j] = 'A';
 		}
 	}
 
-	while (Cheese())
+	while (get_Cheese())
 	{
-		memset(visited, 0, sizeof(visited));
 		memset(air_visited, 0, sizeof(air_visited));
-		ret = Cheese();
-
-		for (int i = 0; i < M; i++)
+		for (int i = 0; i < N; i++)
 		{
-			for (int j = 0; j < N; j++)
+			for (int j = 0; j < M; j++)
 			{
-				if (arr[i][j] == AIR && visited[i][j] == 0)
-					DFS_air(i, j);
+				if (arr[i][j] == 'A' && air_visited[i][j] == 0)
+					dfs_Air(i, j);
 			}
 		}
 
-		for (int i = 0; i < M; i++)
+		before = get_Cheese();
+		
+		for (int i = 0; i < N; i++)
 		{
-			for (int j = 0; j < N; j++)
+			for (int j = 0; j < M; j++)
 			{
-				if (arr[i][j] == 1 && visited[i][j] == 0)
-					DFS(i, j);
+				if (arr[i][j] == '1')
+				{
+					for (int k = 0; k < 4; k++)
+					{
+						int ny = i + dy[k];
+						int nx = j + dx[k];
+
+						if (arr[ny][nx] == 'A')
+						{
+							arr[i][j] = '0';
+							break;
+						}
+					}
+				}
 			}
 		}
-
-		Melt();
 		cnt++;
-
 	}
 
-	cout << cnt << "\n" << ret << "\n";
+	cout << cnt << "\n" << before << "\n";
+
 	return 0;
 }
