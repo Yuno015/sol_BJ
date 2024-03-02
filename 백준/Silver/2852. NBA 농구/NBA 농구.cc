@@ -1,77 +1,89 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int N;
-int cs, cm, ps = 0, pm = 48;
-int m1, m2, s1, s2;
-int score1, score2;
-
-stack<pair<int, string>> s;
-
 int main(void)
 {
+	int N;
+	int team, mm, ss;
+	int pT, pM, pS, pF;
+
+	int t1 = 0, t2 = 0;
+	int m1 = 0, m2 = 0;
+	int s1 = 0, s2 = 0;
+
 	cin >> N;
+
+	scanf("%d %d:%d", &pT, &pM, &pS);
+	if (pT == 1)
+	{
+		t1++;
+		pF = 1;
+	}
+	else
+	{
+		t2++;
+		pF = 2;
+	}
 
 	for (int i = 0; i < N; i++)
 	{
-		int t;
-		string tmp;
-		cin >> t >> tmp;
-		s.push({ t, tmp });
-		if (t == 1) score1++;
-		else score2++;
-	}
-
-	while (!s.empty())
-	{
-		cm = stoi(s.top().second.substr(0, 2));
-		cs = stoi(s.top().second.substr(3));
-
-		int mm, ss;
-		if (ps < cs)
+		if (i == N - 1)
 		{
-			ps += 60;
-			pm -= 1;
-		}
-		mm = pm - cm;
-		ss = ps - cs;
-
-		if (score1 != score2)
-		{
-			if (score1 > score2)
+			int t = 48 * 60;
+			int pt = pM * 60 + pS;
+			if (pF == 1)
 			{
-				m1 += mm;
-				s1 += ss;
+				s1 += t - pt;
+			}
+			else if (pF ==2)
+			{
+				s2 += t - pt;
+			}
+		}
+		else
+		{
+			scanf("%d %d:%d", &team, &mm, &ss);
+			if (team == 1) t1++;
+			else t2++;
 
-				if (s1 > 60)
+			int t = mm * 60 + ss;
+			int pt = pM * 60 + pS;
+
+			if (t1 == t2)
+			{
+				if (pF == 1)
 				{
-					m1 += (s1 / 60);
-					s1 %= 60;
+					s1 += t - pt;
 				}
+				else if (pF == 2)
+				{
+					s2 += t - pt;
+				}
+				pF = 0;
 			}
 			else
 			{
-				m2 += mm;
-				s2 += ss;
-
-				if (s2 > 60)
+				if (pF == 1)
 				{
-					m2 += (s2 / 60);
-					s2 %= 60;
+					s1 += t - pt;
+				}
+				else if (pF == 2)
+				{
+					s2 += t - pt;
+				}
+				else if (pF == 0)
+				{
+					if (team == 1) pF = 1;
+					else pF = 2;
 				}
 			}
 		}
-		
-		if (s.top().first == 1) score1--;
-		else score2--;
-		s.pop();
-
-		pm = cm;
-		ps = cs;
+		pM = mm;
+		pS = ss;
 	}
 
-	printf("%02d:%02d\n", m1, s1);
-	printf("%02d:%02d\n", m2, s2);
+	printf("%02d:%02d\n", s1 / 60, s1 % 60);
+	printf("%02d:%02d\n", s2 / 60, s2 % 60);
 	return 0;
 }
