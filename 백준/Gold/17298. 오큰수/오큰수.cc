@@ -2,36 +2,57 @@
 
 using namespace std;
 
-int arr[1000005], ret[1000005];
-stack<int> s;
-
 int main(void)
 {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
 
 	int N;
 	cin >> N;
 
-	memset(ret, -1, sizeof(ret));
+	stack<int> st;
+	stack<int> g;
+	vector<int> v(N);
+
 	for (int i = 0; i < N; i++)
 	{
-		cin >> arr[i];
+		int tmp;
+		cin >> tmp;
+		st.push(tmp);
+	}
 
-		while (s.size() && arr[s.top()] < arr[i])
+	while (!st.empty())
+	{
+		if (g.empty())
 		{
-			ret[s.top()] = arr[i];
-			s.pop();
+			v[st.size() - 1] = -1;
+			g.push(st.top());
+			st.pop();
 		}
-		s.push(i);
+		else
+		{
+			while (g.empty() || st.top() >= g.top())
+			{
+				if (g.empty()) 
+				{
+					v[st.size() - 1] = -1;
+					break;
+				}
+				g.pop();
+			}
+			if (!g.empty())
+			{
+				v[st.size() - 1] = g.top();
+			}
+			g.push(st.top());
+			st.pop();
+		}
 	}
 
 	for (int i = 0; i < N; i++)
 	{
-		cout << ret[i] << " ";
+		cout << v[i] << " ";
 	}
-
 
 	return 0;
 }
