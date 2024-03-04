@@ -2,77 +2,72 @@
 
 using namespace std;
 
-int arr[55][55];
-vector<pair<int, int>> house;
-vector<pair<int, int>> ck;
-vector<vector<int>> remain;
-int result = INT_MAX;
+int N, M;
+int arr[54][54];
+int ret = INT_MAX;
+vector<pair<int, int>> chicken;
+vector<pair<int, int>> home;
+vector<vector<int>> cc;
+vector<int> tmp;
 
-void combi(int start, vector<int> b, int size)
+void combi(int start)
 {
-	if (b.size() == size)
+	if (tmp.size() == M)
 	{
-		remain.push_back(b);
+		cc.push_back(tmp);
 		return;
 	}
-	for (int i = start + 1; i < ck.size(); i++)
+
+	for (int i = start + 1; i < chicken.size(); i++)
 	{
-		b.push_back(i);
-		combi(i, b, size);
-		b.pop_back();
+		tmp.push_back(i);
+		combi(i);
+		tmp.pop_back();
 	}
-	return;
+}
+
+int cal(int n, int y, int x)
+{
+	int ret = INT_MAX;
+
+	for (int i = 0; i < M; i++)
+	{
+		int tmp = abs(y - chicken[cc[n][i]].first) + abs(x - chicken[cc[n][i]].second);
+		ret = min(tmp, ret);
+	}
+
+	return ret;
 }
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
-	
-	int N, M;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
 	cin >> N >> M;
 
-	for (int y = 1; y <= N; y++)
+	for (int i = 0; i < N; i++)
 	{
-		for (int x = 1; x <= N; x++)
+		for (int j = 0; j < N; j++)
 		{
-			int temp;
-			cin >> temp;
-			arr[y][x] = temp;
-			if (temp == 1)
-				house.push_back(make_pair(y, x));
-			else if (temp == 2)
-				ck.push_back(make_pair(y, x));
+			cin >> arr[i][j];
+			if (arr[i][j] == 2) chicken.push_back({ i, j });
+			else if (arr[i][j] == 1) home.push_back({ i, j });
 		}
 	}
-	vector<int> b;
-	combi(-1, b, M);
 
-	for (int i = 0; i < remain.size(); i++)
+	combi(-1);
+
+	for (int i = 0; i < cc.size(); i++)
 	{
-		int tempR = 0;
-		vector<int> ck_lens;
-		for (int j = 0; j < house.size(); j++)
+		int sum = 0;
+		for (int j = 0; j < home.size(); j++)
 		{
-			int temp = INT_MAX;
-			for (int k = 0; k < remain[i].size(); k++)
-			{
-				int len = abs(house[j].first - ck[remain[i][k]].first) + abs(house[j].second - ck[remain[i][k]].second);
-				if (len < temp)
-					temp = len;
-			}
-			ck_lens.push_back(temp);
+			sum += cal(i, home[j].first, home[j].second);
 		}
-		for (int j = 0; j < ck_lens.size(); j++)
-		{
-			tempR += ck_lens[j];
-		}
-		if (tempR < result)
-			result = tempR;
+		ret = min(sum, ret);
 	}
 
-	cout << result << "\n";
-
+	cout << ret << "\n";
 	return 0;
 }
