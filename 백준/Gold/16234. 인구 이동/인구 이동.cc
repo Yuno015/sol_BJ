@@ -2,41 +2,38 @@
 
 using namespace std;
 
-const int n = 54;
-
 int N, L, R;
-int arr[n][n];
-int visited[n][n];
+int arr[54][54];
+int visited[54][54];
+int uni;
+int ret;
 
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
 
-bool fMove = true;
-int cnt = 0;
-int vcnt = 1;
-int cp[n * n];
-int cpcnt[n * n];
+int sum[2505];
+int num[2505];
 
-void go(int y, int x)
+void dfs(int y, int x)
 {
-	visited[y][x] = vcnt;
+	visited[y][x] = uni;
 
 	for (int i = 0; i < 4; i++)
 	{
 		int ny = y + dy[i];
 		int nx = x + dx[i];
 
-		if (ny < 0 || nx < 0 || ny >= N || nx >= N || visited[ny][nx]) continue;
-		if (abs(arr[ny][nx] - arr[y][x]) >= L && abs(arr[ny][nx] - arr[y][x]) <= R)
-		{
-			fMove = true;
-			go(ny, nx);
-		}
+		if (ny < 0 || nx < 0 || ny >= N || nx >= N) continue;
+		if (visited[ny][nx] == -1 && abs(arr[ny][nx] - arr[y][x]) >= L && abs(arr[ny][nx] - arr[y][x]) <= R)
+			dfs(ny, nx);
 	}
 }
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
 	cin >> N >> L >> R;
 
 	for (int i = 0; i < N; i++)
@@ -47,23 +44,21 @@ int main(void)
 		}
 	}
 
-	while (fMove)
+	while (1)
 	{
-		fMove = false;
-		vcnt = 1;
-		cnt++;
-		memset(visited, 0, sizeof(visited));
-		memset(cp, 0, sizeof(cp));
-		memset(cpcnt, 0, sizeof(cpcnt));
+		memset(visited, -1, sizeof(visited));
+		memset(num, 0, sizeof(num));
+		memset(sum, 0, sizeof(sum));
+		uni = 0;
 
 		for (int i = 0; i < N; i++)
 		{
 			for (int j = 0; j < N; j++)
 			{
-				if (visited[i][j] == 0)
+				if (visited[i][j] == -1)
 				{
-					go(i, j);
-					vcnt++;
+					dfs(i, j);
+					uni++;
 				}
 			}
 		}
@@ -72,52 +67,24 @@ int main(void)
 		{
 			for (int j = 0; j < N; j++)
 			{
-				cp[visited[i][j]] += arr[i][j];
-				cpcnt[visited[i][j]]++;
+				num[visited[i][j]]++;
+				sum[visited[i][j]] += arr[i][j];
 			}
 		}
+
+		int n = *max_element(num, num + uni + 1);
+		if (n == 1) break;
 
 		for (int i = 0; i < N; i++)
 		{
 			for (int j = 0; j < N; j++)
 			{
-				arr[i][j] = cp[visited[i][j]] / cpcnt[visited[i][j]];
+				arr[i][j] = sum[visited[i][j]] / num[visited[i][j]];
 			}
 		}
-		/*
-		for (int i = 0; i < N * N + 2; i++)
-		{
-			cout << cp[i] << " ";
-		}
-		cout << "\n";
 
-		for (int i = 0; i < N * N + 2; i++)
-		{
-			cout << cpcnt[i] << " ";
-		}
-		cout << "\n";
-		
-		for (int i = 0; i < N; i++)
-		{
-			for (int j = 0; j < N; j++)
-			{
-				cout << arr[i][j] << " ";
-			}
-			cout << "\n";
-		}
-		*/
+		ret++;
 	}
-
-	/*
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			cout << visited[i][j] << " ";
-		}
-		cout << "\n";
-	}
-	*/
-	cout << cnt - 1 << "\n";
+	cout << ret << "\n";
 	return 0;
 }
