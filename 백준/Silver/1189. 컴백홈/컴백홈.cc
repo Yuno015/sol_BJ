@@ -2,49 +2,48 @@
 
 using namespace std;
 
-const int N = 7;
+int R, C, K;
+char arr[7][7];
+int visited[7][7];
+
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
 
-int R, C, K, x, y, cnt, visited[N][N];
-char arr[N][N];
-string s;
-vector<pair<int, int>> v;
-
-void go(int y, int x)
+int dfs(int y, int x)
 {
-	if (v.size() == K)
+	if (y == 0 && x == C - 1)
 	{
-		if (v[K-1].first == 0 && v[K-1].second == C - 1)
-		{
-			cnt++;
-		}
-		return;
+		if (K == visited[y][x]) return 1;
+		return 0;
 	}
-	
+
+	int ret = 0;
+
 	for (int i = 0; i < 4; i++)
 	{
 		int ny = y + dy[i];
 		int nx = x + dx[i];
 
 		if (ny < 0 || nx < 0 || ny >= R || nx >= C) continue;
-		if (visited[ny][nx] == 0 && arr[ny][nx] != 'T')
-		{
-			visited[ny][nx] = 1;
-			v.push_back({ ny, nx });
-			go(ny, nx);
-			v.pop_back();
-			visited[ny][nx] = 0;
-		}
+		if (arr[ny][nx] == 'T' || visited[ny][nx] != 0) continue;
+
+		visited[ny][nx] = visited[y][x] + 1;
+		ret += dfs(ny, nx);
+		visited[ny][nx] = 0;
 	}
+	return ret;
 }
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
 	cin >> R >> C >> K;
-	
+
 	for (int i = 0; i < R; i++)
 	{
+		string s;
 		cin >> s;
 		for (int j = 0; j < C; j++)
 		{
@@ -52,10 +51,8 @@ int main(void)
 		}
 	}
 
-	visited[R - 1][0] = 1;
-	v.push_back({ R - 1, 0 });
-	go(R - 1, 0);
+	visited[R-1][0] = 1;
+	cout << dfs(R - 1, 0) << "\n";
 
-	cout << cnt << "\n";
 	return 0;
 }
