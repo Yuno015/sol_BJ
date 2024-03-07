@@ -2,95 +2,82 @@
 
 using namespace std;
 
-const int n = 1004;
-
 int R, C;
-char arr[n][n];
-int visitedF[n][n];
-int visitedJ[n][n];
-int jy, jx;
-int y, x;
-int ret = INT_MAX;
-bool escape = false;
+
+char arr[1004][1004];
+int visitedJ[1004][1004];
+int visitedF[1004][1004];
+
+int jy, jx, fy, fx;
 
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
 
+bool out = false;
+int mn = INT_MAX;
+
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
 	cin >> R >> C;
-	cin.ignore();
-	for (int i = 0; i < R; i++)
-	{
-		string temp;
-		cin >> temp;
-		for (int j = 0; j < C; j++)
-		{
-			arr[i][j] = temp[j];
-			if (temp[j] == 'J')
-			{
-				jy = i;
-				jx = j;
-			}
-			if (temp[j] == 'F')
-			{
-				visitedJ[i][j] = INT_MAX;
-			}
-		}
-	}
+
+	memset(visitedF, -1, sizeof(visitedF));
+	memset(visitedJ, -1, sizeof(visitedJ));
 
 	queue<pair<int, int>> fire;
+	queue<pair<int, int>> JH;
+
 	for (int i = 0; i < R; i++)
 	{
+		string s;
+		cin >> s;
 		for (int j = 0; j < C; j++)
 		{
+			arr[i][j] = s[j];
+			if (arr[i][j] == 'J')
+			{
+				JH.push({ i, j });
+				visitedJ[i][j] = 0;
+			}
 			if (arr[i][j] == 'F')
 			{
 				fire.push({ i, j });
-				visitedF[i][j] = 1;
+				visitedF[i][j] = 0;
 			}
 		}
 	}
 
-	while (fire.size())
+	while (!JH.empty())
 	{
-		tie(y, x) = fire.front();
-		fire.pop();
+		tie(jy, jx) = JH.front(); JH.pop();
 
 		for (int i = 0; i < 4; i++)
 		{
-			int ny = y + dy[i];
-			int nx = x + dx[i];
+			int ny = jy + dy[i];
+			int nx = jx + dx[i];
 
 			if (ny < 0 || nx < 0 || ny >= R || nx >= C) continue;
-			if (arr[ny][nx] != '#' && visitedF[ny][nx] == 0)
-			{
-				fire.push({ ny, nx });
-				visitedF[ny][nx] = visitedF[y][x] + 1;
-			}
+			if (visitedJ[ny][nx] != -1 || arr[ny][nx] != '.') continue;
+			JH.push({ ny, nx });
+			visitedJ[ny][nx] = visitedJ[jy][jx] + 1;
 		}
 	}
 
-	queue<pair<int, int>> JH;
-	JH.push({ jy, jx });
-	visitedJ[jy][jx] = 1;
-
-	while (JH.size())
+	while (!fire.empty())
 	{
-		tie(y, x) = JH.front();
-		JH.pop();
+		tie(fy, fx) = fire.front(); fire.pop();
 
 		for (int i = 0; i < 4; i++)
 		{
-			int ny = y + dy[i];
-			int nx = x + dx[i];
+			int ny = fy + dy[i];
+			int nx = fx + dx[i];
 
 			if (ny < 0 || nx < 0 || ny >= R || nx >= C) continue;
-			if (arr[ny][nx] == '.' && visitedJ[ny][nx] == 0)
-			{
-				JH.push({ ny, nx });
-				visitedJ[ny][nx] = visitedJ[y][x] + 1;
-			}
+			if (visitedF[ny][nx] != -1 || arr[ny][nx] != '.') continue;
+			fire.push({ ny, nx });
+			visitedF[ny][nx] = visitedF[fy][fx] + 1;
 		}
 	}
 
@@ -100,18 +87,20 @@ int main(void)
 		{
 			if (i == 0 || j == 0 || i == R - 1 || j == C - 1)
 			{
-				if ((visitedF[i][j] == 0 && visitedJ[i][j] != 0) || visitedJ[i][j] < visitedF[i][j])
+				if (visitedJ[i][j] != -1)
 				{
-					escape = true;
-					ret = min(ret, visitedJ[i][j]);
+					if (visitedF[i][j] == -1 || visitedJ[i][j] < visitedF[i][j])
+					{
+						mn = min(mn, visitedJ[i][j]);
+						out = true;
+					}
 				}
 			}
 		}
 	}
 
-	if (escape && ret != 0)
-		cout << ret << "\n";
-	else
-		cout << "IMPOSSIBLE" << "\n";
+	if (out) cout << mn + 1 << "\n";
+	else cout << "IMPOSSIBLE\n";
+
 	return 0;
 }
