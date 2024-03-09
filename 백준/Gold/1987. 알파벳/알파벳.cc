@@ -2,33 +2,25 @@
 
 using namespace std;
 
-const int n = 22;
-
 int R, C;
-char arr[n][n];
-int visited[n][n];
-int alpha[26];
-int cnt = 1;
-int mx = INT_MIN;
-vector<char> v;
+char arr[22][22];
+int visited[22][22];
+int alpha[30];
+int mx = 0;
+int ret;
 
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
 
-bool isV(char c)
+bool cmp(string a, string b)
 {
-	if (alpha[c - 'A'] != 0)
-		return true;
-	else
-		return false;
+	if (a.length() == b.length()) return a < b;
+	return a.length() < b.length();
 }
 
-void go(int y, int x)
+void go(int y, int x, int cnt)
 {
-	visited[y][x] = 1;
-	alpha[arr[y][x] - 'A']++;
-	v.push_back(arr[y][x]);
-	mx = max(mx, int(v.size()));
+	ret = max(ret, cnt);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -36,32 +28,35 @@ void go(int y, int x)
 		int nx = x + dx[i];
 
 		if (ny < 0 || nx < 0 || ny >= R || nx >= C) continue;
-		if (visited[ny][nx] == 0 && isV(arr[ny][nx]) == false)
-		{
-			go(ny, nx);
-			v.pop_back();
-			visited[ny][nx] = 0;
-			alpha[arr[ny][nx] - 'A']--;
-		}
+		if (visited[ny][nx] != 0 || alpha[arr[ny][nx] - 'A'] != 0) continue;
+		alpha[arr[ny][nx] - 'A'] = 1;
+		visited[ny][nx] = 1;
+		go(ny, nx, cnt + 1);
+		alpha[arr[ny][nx] - 'A'] = 0;
+		visited[ny][nx] = 0;
 	}
+
+	return;
 }
 
 int main(void)
 {
 	cin >> R >> C;
-
+	
 	for (int i = 0; i < R; i++)
 	{
-		string temp;
-		cin >> temp;
+		string s;
+		cin >> s;
 		for (int j = 0; j < C; j++)
 		{
-			arr[i][j] = temp[j];
+			arr[i][j] = s[j];
 		}
 	}
 
-	go(0, 0);
+	alpha[arr[0][0] - 'A'] = 1;
+	visited[0][0] = 1;
+	go(0, 0, 1);
 
-	cout << mx << "\n";
+	cout << ret << "\n";
 	return 0;
 }
