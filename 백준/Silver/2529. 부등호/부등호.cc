@@ -2,78 +2,50 @@
 
 using namespace std;
 
-int r;
+int k;
+int visited[10];
+char arr[10];
+vector<string> ret;
 
-string mn, mx;
-
-vector<char> c;
-vector<string> v;
-
-void check(string s)
+bool good(char x, char y, char op)
 {
-	bool check = true;
+	if (x < y && op == '<') return true;
+	if (x > y && op == '>') return true;
+	return false;
+}
 
-	for (int i = 0; i < c.size(); i++)
+void go(int idx, string num)
+{
+	if (idx == k + 1)
 	{
-		if (c[i] == '<')
-		{
-			if (s[i] > s[i + 1])
-			{
-				check = false;
-				break;
-			}
-		}
-		else if (c[i] == '>')
-		{
-			if (s[i] < s[i + 1])
-			{
-				check = false;
-				break;
-			}
-		}
+		ret.push_back(num);
+		return;
 	}
 
-	if (check == true)
+	for (int i = 0; i <= 9; i++)
 	{
-		if (mn == "") mn = s;
-		else if (mx == "") mx = s;
-		else
+		if (visited[i]) continue;
+		if (idx == 0 || good(num[idx - 1], i + '0', arr[idx - 1]))
 		{
-			mx = max(s, mx);
+			visited[i] = 1;
+			go(idx + 1, num + to_string(i));
+			visited[i] = 0;
 		}
 	}
+	return;
 }
 
 int main(void)
 {
-	cin >> r;
-	vector<int> arr(10);
-
-	for (int i = 0; i < r; i++)
+	cin >> k;
+	for (int i = 0; i < k; i++)
 	{
-		char tmp;
-		cin >> tmp;
-		c.push_back(tmp);
+		cin >> arr[i];
 	}
 
-	for (int i = 0; i < arr.size(); i++)
-	{
-		arr[i] = i;
-	}
-
-	do {
-		string s = "";
-		for (int i = 0; i < r + 1; i++)
-		{
-			s += to_string(arr[i]);
-		}
-
-		check(s);
-
-		reverse(arr.begin() + r + 1, arr.end());
-	} while (next_permutation(arr.begin(), arr.end()));
-
-	cout << mx << "\n" << mn << "\n";
+	go(0, "");
+	sort(ret.begin(), ret.end());
+	cout << ret[ret.size() - 1] << "\n" << ret[0] << "\n";
 
 	return 0;
 }
