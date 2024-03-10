@@ -2,57 +2,77 @@
 
 using namespace std;
 
-const int n = 100001;
 int N, K;
-int NK;
-map<int, int> mp;
-int visited[n];
-int ret = 0;
-int m = INT_MAX;
-bool flag = false;
+int visited[100010];
+long long cnt[100010];
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cout.tie(NULL); cin.tie(NULL);
+
 	cin >> N >> K;
-	NK = abs(N - K);
-	
-	queue<pair<int, int>> q;
-	q.push({ N, 0 });
-	visited[N] = 1;
 
-	while (q.size())
+	if (N == K) cout << 0 << "\n" << 1 << "\n";
+	else
 	{
-		int here = q.front().first;
-		int cur = q.front().second;
-		q.pop();
-		visited[here] = 1;
+		visited[N] = 1;
+		cnt[N] = 1;
 
-		if (here == K)
+		queue<int> q;
+		q.push(N);
+
+		while (!q.empty())
 		{
-			m = cur;
-			ret++;
-			break;
+			int now = q.front();
+			q.pop();
+
+			int next;
+			next = now - 1;
+			if (next >= 0 && next <= 100000)
+			{
+				if (visited[next] == 0)
+				{
+					q.push(next);
+					visited[next] = visited[now] + 1;
+					cnt[next] += cnt[now];
+				}
+				else if (visited[next] == visited[now] + 1)
+				{
+					cnt[next] += cnt[now];
+				}
+			}
+			next = now + 1;
+			if (next >= 0 && next <= 100000)
+			{
+				if (visited[next] == 0)
+				{
+					q.push(next);
+					visited[next] = visited[now] + 1;
+					cnt[next] += cnt[now];
+				}
+				else if (visited[next] == visited[now] + 1)
+				{
+					cnt[next] += cnt[now];
+				}
+			}
+			next = now * 2;
+			if (next >= 0 && next <= 100000)
+			{
+				if (visited[next] == 0)
+				{
+					q.push(next);
+					visited[next] = visited[now] + 1;
+					cnt[next] += cnt[now];
+				}
+				else if (visited[next] == visited[now] + 1)
+				{
+					cnt[next] += cnt[now];
+				}
+			}
 		}
-		
-		if (here - 1 >= 0 && here - 1 < n && visited[here - 1] == 0)
-			q.push({ here - 1, cur + 1 });
-		if (here + 1 >= 0 && here + 1 < n && visited[here + 1] == 0)
-			q.push({ here + 1, cur + 1 });
-		if (2 * here >= 0 && 2 * here < n && visited[2 * here] == 0)
-			q.push({ here * 2, cur + 1 });
+		cout << visited[K] - 1 << "\n" << cnt[K] << "\n";
 	}
 
-	while (q.size())
-	{
-		int here = q.front().first;
-		int cur = q.front().second;
-
-		if (here == K && cur == m)
-			ret++;
-
-		q.pop();
-	}
-
-	cout << m << "\n" << ret << "\n";
 	return 0;
 }
