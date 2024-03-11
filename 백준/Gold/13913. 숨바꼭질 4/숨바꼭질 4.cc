@@ -2,79 +2,67 @@
 
 using namespace std;
 
-const int n = 100001;
 int N, K;
-int NK;
-map<int, int> mp;
-int visited[n];
-int arr[n];
-int ret = 0;
-int m = INT_MAX;
-int before;
+int visited[100010];
+int before[100010];
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cout.tie(NULL); cin.tie(NULL);
+
 	cin >> N >> K;
-	NK = abs(N - K);
-	
-	queue<pair<int, int>> q;
-	q.push({ N, 0 });
-	visited[N] = 1;
 
-	while (q.size())
+	if (N == K) cout << 0 << "\n" << N << "\n";
+	else
 	{
-		int here = q.front().first;
-		int cur = q.front().second;
-		q.pop();
-		visited[here] = 1;
+		visited[N] = 1;
+		before[N] = -1;
+		queue<int> q;
+		q.push(N);
 
-		if (here == K)
+		while (!q.empty())
 		{
-			m = cur;
-			ret++;
-			break;
+			int now = q.front();
+			q.pop();
+
+			for (int next : {now - 1, now + 1, now * 2})
+			{
+				if (next >= 0 && next <= 100000)
+				{
+					if (next == K)
+					{
+						visited[next] = visited[now] + 1;
+						before[K] = now;
+						goto END;
+					}
+					if (visited[next] == 0)
+					{
+						q.push(next);
+						visited[next] = visited[now] + 1;
+						before[next] = now;
+					}
+				}
+			}
 		}
-		
-		if (here - 1 >= 0 && here - 1 < n && visited[here - 1] == 0)
+
+	END:
+
+		stack<int> ret;
+		ret.push(K);
+		int i = K;
+		while (before[i] != -1)
 		{
-			q.push({ here - 1, cur + 1 });
-			if (arr[here - 1] == 0)
-				arr[here - 1] = here;
+			ret.push(before[i]);
+			i = before[i];
 		}
-		if (here + 1 >= 0 && here + 1 < n && visited[here + 1] == 0)
+		cout << visited[K] - 1 << "\n";
+		while (!ret.empty())
 		{
-			q.push({ here + 1, cur + 1 });
-			if (arr[here + 1] == 0)
-				arr[here + 1] = here;
-		}
-		if (2 * here >= 0 && 2 * here < n && visited[2 * here] == 0)
-		{
-			q.push({ here * 2, cur + 1 });
-			if (arr[here * 2] == 0)
-				arr[here * 2] = here;
+			cout << ret.top() << " ";
+			ret.pop();
 		}
 	}
 
-	cout << m << "\n";
-	stack<int> s;
-	int tmp = K;
-	s.push(K);
-	if (N != K)
-	{
-		while (1)
-		{
-			if (arr[tmp] == N)
-				break;
-			s.push(arr[tmp]);
-			tmp = arr[tmp];
-		}
-		s.push(N);
-	}
-	while (s.size())
-	{
-		cout << s.top() << " ";
-		s.pop();
-	}
-	cout << "\n";
 	return 0;
 }
