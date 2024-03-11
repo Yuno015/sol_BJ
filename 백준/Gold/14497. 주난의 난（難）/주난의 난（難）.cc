@@ -6,32 +6,11 @@ int N, M;
 char arr[303][303];
 int visited[303][303];
 int jy, jx, by, bx;
+int y, x;
 int cnt;
 
 const int dy[] = { -1, 0, 1, 0 };
 const int dx[] = { 0, 1, 0, -1 };
-
-void dfs(int y, int x)
-{
-	visited[y][x] = 1;
-
-	for (int i = 0; i < 4; i++)
-	{
-		int ny = y + dy[i];
-		int nx = x + dx[i];
-
-		if (ny < 1 || nx < 1 || ny > N || nx > M || visited[ny][nx]) continue;
-		if (arr[ny][nx] != '0')
-		{
-			visited[ny][nx] = 1;
-			arr[ny][nx] = '0';
-		}
-		else if (arr[ny][nx] == '0')
-		{
-			dfs(ny, nx);
-		}
-	}
-}
 
 int main(void)
 {
@@ -49,18 +28,40 @@ int main(void)
 		}
 	}
 
-	while (1)
+	queue<pair<int, int>> q1, q0;
+	visited[jy][jx] = 1;
+	q1.push({ jy, jx });
+
+	while (!q1.empty() || !q0.empty())
 	{
-		if (arr[by][bx] == '0') break;
-		memset(visited, 0, sizeof(visited));
+		if (q0.empty())
+		{
+			tie(y, x) = q1.front(); q1.pop();
+		}
+		else
+		{
+			tie(y, x) = q0.front(); q0.pop();
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = y + dy[i];
+			int nx = x + dx[i];
 
-		dfs(jy, jx);
-		
-		cnt++;
-
+			if (ny < 1 || nx < 1 || ny > N || nx > M || visited[ny][nx]) continue;
+			if (arr[ny][nx] == '0')
+			{
+				visited[ny][nx] = visited[y][x];
+				q0.push({ ny, nx });
+			}
+			else
+			{
+				visited[ny][nx] = visited[y][x] + 1;
+				q1.push({ ny, nx });
+			}
+		}
 	}
 
-	cout << cnt << "\n";
+	cout << visited[by][bx] - 1 << "\n";
 
 	return 0;
 }
