@@ -2,33 +2,33 @@
 
 using namespace std;
 
-int N;
+int n;
 string s;
-int arr_i[20];
-char arr_g[20];
-long long mx = LONG_MIN;
 
-vector<vector<int>> v;
-vector<int> tmp;
+vector<int> num;
+vector<char> oper_str;
+int ret = INT_MIN;
 
-void func(int idx, vector<int> t, bool flag)
+int oper(char a, int b, int c)
 {
-	if (idx == N / 2)
+	if (a == '+') return b + c;
+	if (a == '-') return b - c;
+	if (a == '*') return b * c;
+}
+
+void go(int idx, int sum)
+{
+	if (idx == num.size() - 1)
 	{
-		v.push_back(t);
+		ret = max(ret, sum);
 		return;
 	}
 
-	if (flag == true)
+	go(idx + 1, oper(oper_str[idx], sum, num[idx + 1]));
+	if (idx < num.size() - 2)
 	{
-		func(idx + 1, t, 0);
-	}
-	else
-	{
-		func(idx + 1, t, 0);
-
-		t.push_back(idx * 2 + 1);
-		func(idx + 1, t, 1);
+		int temp = oper(oper_str[idx + 1], num[idx + 1], num[idx + 2]);
+		go(idx + 2, oper(oper_str[idx], sum, temp));
 	}
 
 	return;
@@ -36,71 +36,17 @@ void func(int idx, vector<int> t, bool flag)
 
 int main(void)
 {
-	cin >> N;
+	cin >> n;
 	cin >> s;
 
-	if (N == 1)
+	for (int i = 0; i < n; i++)
 	{
-		cout << s << "\n";
+		if (i % 2 == 0) num.push_back(s[i] - '0');
+		else oper_str.push_back(s[i]);
 	}
-	else
-	{
-		for (int i = 0; i < s.length(); i++)
-		{
-			if (i % 2 != 0) arr_g[i] = s[i];
-			else arr_i[i] = s[i] - '0';
-		}
 
-		func(1, tmp, 0);
+	go(0, num[0]);
 
-		for (int i = 0; i < v.size(); i++)
-		{
-			long long tmp = arr_i[0];
-			int carri[20];
-			char carrg[20];
-			memcpy(carri, arr_i, sizeof(int) * 20);
-			memcpy(carrg, arr_g, sizeof(char) * 20);
-
-			for (int j = 0; j < v[i].size(); j++)
-			{
-				int t = 0;
-				if (arr_g[v[i][j]] == '+')
-				{
-					t = arr_i[v[i][j] - 1] + arr_i[v[i][j] + 1];
-				}
-				else if (arr_g[v[i][j]] == '-')
-				{
-					t = arr_i[v[i][j] - 1] - arr_i[v[i][j] + 1];
-				}
-				else if (arr_g[v[i][j]] == '*')
-				{
-					t = arr_i[v[i][j] - 1] * arr_i[v[i][j] + 1];
-				}
-				else continue;
-
-				carri[v[i][j] - 1] = t;
-				carri[v[i][j] + 1] = 0;
-				carrg[v[i][j]] = '0';
-			}
-			for (int j = 0; j < N; j++)
-			{
-				if (carrg[j] == '+')
-				{
-					tmp += carri[j + 1];
-				}
-				else if (carrg[j] == '-')
-				{
-					tmp -= carri[j + 1];
-				}
-				else if (carrg[j] == '*')
-				{
-					tmp *= carri[j + 1];
-				}
-			}
-			mx = max(mx, tmp);
-		}
-
-		cout << mx << "\n";
-	}
+	cout << ret << "\n";
 	return 0;
 }
