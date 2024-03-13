@@ -4,41 +4,39 @@ using namespace std;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios_base::sync_with_stdio(false);
+	cout.tie(NULL); cin.tie(NULL);
 
 	int N, M;
 	cin >> N >> M;
 
-	vector<string> noH;
-	vector<string> noS;
-
-	while (N--)
+	vector<string> v;
+	set<string> s;
+	for (int i = 0; i < N; i++)
 	{
 		string temp;
 		cin >> temp;
-		noH.push_back(temp);
+		v.push_back(temp);
 	}
-	while (M--)
+	for (int i = 0; i < M; i++)
 	{
 		string temp;
 		cin >> temp;
-		noS.push_back(temp);
+		s.insert(temp);
 	}
-	sort(noH.begin(), noH.end());
-	sort(noS.begin(), noS.end());
 
-	vector<string> ret;
-	ret.resize(noH.size() + noS.size());
-	auto it = set_intersection(noH.begin(), noH.end(), noS.begin(), noS.end(), ret.begin());
-	ret.erase(it, ret.end());
-	sort(ret.begin(), ret.end());
-
-	cout << ret.size() << "\n";
-	for (int i = 0; i < ret.size(); i++)
+	sort(v.begin(), v.end());
+	vector<string> result;
+	for (int i = 0; i < v.size(); i++)
 	{
-		cout << ret[i] << "\n";
+		if (s.find(v[i]) != s.end())
+			result.push_back(v[i]);
+	}
+
+	cout << result.size() << "\n";
+	for (int i = 0; i < result.size(); i++)
+	{
+		cout << result[i] << "\n";
 	}
 	return 0;
 }
