@@ -3,26 +3,31 @@
 using namespace std;
 
 int N;
-int arr[5005];
-int ret = INT_MAX;
 
 int main(void)
 {
 	cin >> N;
-	memset(arr, -1, sizeof(arr));
-	arr[3] = 1; arr[5] = 1;
-
-	for (int i = 6; i <= 5000; i++)
+	if (N % 5 == 0)
 	{
-		for (int j = i - 1; j > (i - 1) / 2; j--)
-		{
-			if (arr[j] == -1 || arr[i - j] == -1) continue;
-			int temp = arr[j] + arr[i - j];
-			if (arr[i] == -1) arr[i] = temp;
-			else arr[i] = min(arr[i], temp);
-		}
+		cout << N / 5 << "\n";
+		return 0;
 	}
 
-	cout << arr[N] << "\n";
+	int ret = -1;
+	int cnt = N / 5;
+	while (1)
+	{
+		int temp = N - cnt * 5;
+		if (temp % 3 == 0)
+		{
+			ret = cnt + temp / 3;
+			break;
+		}
+		if (cnt == 0) break;
+		cnt--;
+	}
+
+	cout << ret;
+
 	return 0;
 }
