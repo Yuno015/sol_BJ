@@ -5,13 +5,6 @@ using namespace std;
 int n, p, d;
 long long sum = 0;
 
-bool cmp(pair<int, int>& a, pair<int, int>& b)
-{
-	if (a.second == b.second)
-		return a.first > b.first;
-	return a.second > b.second;
-}
-
 int main(void)
 {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
@@ -26,20 +19,21 @@ int main(void)
 	for (int i = 0; i < n; i++)
 	{
 		cin >> p >> d;
-		v.push_back({ p,d });
+		v.push_back({ d, p });
+	}
+	
+	sort(v.begin(), v.end());
+	priority_queue<int, vector<int>, greater<int>> pq;
+	for (int i = 0; i < n; i++)
+	{
+		pq.push(v[i].second);
+		if (pq.size() > v[i].first) pq.pop();
 	}
 
-	sort(v.begin(), v.end(), cmp);
-	
-	priority_queue<long long> pq;
-	int j = 0;
-	for (int i = v[0].second; i > 0; i--)
+	while (pq.size())
 	{
-		while (j < n && v[j].second == i) pq.push(v[j++].first);
-		if (pq.size())
-		{
-			sum += pq.top(); pq.pop();
-		}
+		sum += pq.top();
+		pq.pop();
 	}
 
 	cout << sum << "\n";
