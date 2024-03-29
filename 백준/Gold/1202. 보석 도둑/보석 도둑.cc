@@ -7,6 +7,7 @@ long long sum = 0;
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 	cin >> n >> k;
 
 	vector<pair<int, int>> bs;
