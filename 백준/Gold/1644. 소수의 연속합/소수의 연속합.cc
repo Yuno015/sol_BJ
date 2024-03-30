@@ -2,6 +2,8 @@
 
 using namespace std;
 
+bool che[4000005];
+
 int main(void)
 {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
@@ -12,19 +14,22 @@ int main(void)
 	if (n == 1) { cout << 0; return 0; }
 
 	vector<int> v;
-	v.push_back(2);
-	for (int i = 3; i <= n; i += 2)
+	//int counter = 0;
+	for (int i = 2; i <= n; i++)
 	{
-		bool flag = false;
-		for (int j = 0; v[j] * v[j] <= i; j++)
+		if (che[i]) continue;
+
+		for (int j = 2 * i; j <= n; j += i)
 		{
-			if (i % v[j] == 0)
-			{
-				flag = true;
-				break;
-			}
+			che[j] = 1;
+			//counter++;
 		}
-		if (flag == false) v.push_back(i);
+	}
+	//cout << counter << "\n";
+
+	for (int i = 2; i <= n; i++)
+	{
+		if (che[i] == 0) v.push_back(i);
 	}
 	
 	int cnt = 0;
