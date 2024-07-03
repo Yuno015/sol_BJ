@@ -2,37 +2,32 @@
 
 using namespace std;
 
+int T, n;
+
 int main(void)
 {
-	ios_base::sync_with_stdio(0);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
 
-	int t;
-	cin >> t;
+	cin >> T;
 
-	while (t--)
+	while (T--)
 	{
-		int n;
 		cin >> n;
-
+		int ret = 1;
 		map<string, int> mp;
 		for (int i = 0; i < n; i++)
 		{
-			string a, b;
-			cin >> a >> b;
-			auto iter = mp.find(b);
-			if (iter != mp.end()) iter->second++;
-			else mp.insert({ b, 1 });
-		}
+			string name, category;
+			cin >> name >> category;
 
-		int ret = 1;
+			mp[category]++;
+		}
 		for (auto iter = mp.begin(); iter != mp.end(); iter++)
 		{
-			ret *= (iter->second) + 1;
+			ret *= (iter->second + 1);
 		}
-
-		cout << ret - 1 << '\n';
+		cout << ret - 1 << "\n";
 	}
 	return 0;
 }
