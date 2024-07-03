@@ -2,27 +2,28 @@
 
 using namespace std;
 
-int arr[100004];
-int psum[100004];
+int N, K;
+int sum[100002];
+int ret = INT_MIN;
 
 int main(void)
 {
-	int N, K;
 	cin >> N >> K;
 
-	memset(psum, 0, sizeof(psum));
 	for (int i = 1; i <= N; i++)
 	{
-		cin >> arr[i];
-		psum[i] = psum[i - 1] + arr[i];
+		int temp;
+		cin >> temp;
+
+		sum[i] = sum[i - 1] + temp;
 	}
 
-	vector<int> ret;
 	for (int i = K; i <= N; i++)
 	{
-		ret.push_back(psum[i] - psum[i - K]);
+		int temp = sum[i] - sum[i - K];
+		if (temp > ret) ret = temp;
 	}
 
-	cout << *max_element(ret.begin(), ret.end()) << '\n';
+	cout << ret;
 	return 0;
 }
