@@ -2,37 +2,36 @@
 
 using namespace std;
 
-string arr[100004];
+int N, M;
+vector<string> v;
+unordered_map<string, int> mp;
 
 int main(void)
 {
-    ios_base::sync_with_stdio(0);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-	int N, M;
-	map<string, int> mp;
-
 	cin >> N >> M;
 
-	for (int i = 0; i < N; i++)
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
+
+	for (int i = 1; i <= N; i++)
+	{
+		string temp;
+		cin >> temp;
+		v.push_back(temp);
+		mp.insert({ temp, i });
+	}
+
+	for (int j = 0; j < M; j++)
 	{
 		string s;
 		cin >> s;
-
-		mp.insert({ s, i + 1 });
-		arr[i + 1] = s;
+		auto iter = mp.find(s);
+		if (iter != mp.end()) cout << iter->second << "\n";
+		else
+		{
+			int idx = stoi(s);
+			cout << v[idx - 1] << "\n";
+		}
 	}
-
-	for (int i = 0; i < M; i++)
-	{
-		string s;
-		cin >> s;
-
-		int x = atoi(s.c_str());
-		if (x == 0) cout << mp[s] << '\n';
-		else cout << arr[x] << '\n';
-	}
-
 	return 0;
 }
