@@ -2,39 +2,65 @@
 
 using namespace std;
 
+int N, star;
+string s, b, e;
+vector<string> v;
+
 int main(void)
 {
-	int n;
-	cin >> n;
-
-	string s;
+	cin >> N;
 	cin >> s;
-
-	int pos = s.find('*');
-	string front = s.substr(0, pos);
-	string back = s.substr(pos + 1);
-	reverse(back.begin(), back.end());
-
-	for (int i = 0; i < n; i++)
+	
+	for (int i = 0; i < N; i++)
 	{
-		string tmp;
-		cin >> tmp;
+		string temp;
+		cin >> temp;
+		v.push_back(temp);
+	}
 
-		if (front.size() + back.size() > tmp.size()) cout << "NE\n";
-		else
+	for (int i = 0; i < s.length(); i++)
+	{
+		if (s[i] == '*')
 		{
-			int len_f = front.length();
-			int len_b = back.length();
-
-			string tmp_f = tmp.substr(0, len_f);
-			reverse(tmp.begin(), tmp.end());
-			string tmp_b = tmp.substr(0, len_b);
-
-
-			if (tmp_f == front && tmp_b == back) cout << "DA\n";
-
-			else cout << "NE\n";
+			star = i;
+			break;
 		}
 	}
+
+	for (int i = 0; i < star; i++)
+	{
+		b += s[i];
+	}
+
+	for (int i = s.length() - 1; i > star; i--)
+	{
+		e += s[i];
+	}
+
+	for (int i = 0; i < v.size(); i++)
+	{
+		bool OK = true;
+		if (b.length() + e.length() > v[i].length()) OK = false;
+		for (int j = 0; j < b.length(); j++)
+		{
+			if (v[i][j] != b[j])
+			{
+				OK = false;
+				break;
+			}
+		}
+
+		for (int j = 0; j < e.length(); j++)
+		{
+			if (v[i][v[i].length() - 1 - j] != e[j])
+			{
+				OK = false;
+				break;
+			}
+		}
+		if (OK) cout << "DA\n";
+		else cout << "NE\n";
+	}
+
 	return 0;
 }
