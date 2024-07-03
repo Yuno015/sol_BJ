@@ -2,54 +2,47 @@
 
 using namespace std;
 
-const int NUM = 26;
+string s, ret, front, back, center;
+int alpha[26];
+int cnt;
 
 int main(void)
 {
-	ios_base::sync_with_stdio(0);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
 
-	string s;
 	cin >> s;
-
-	int arr[NUM];
-	memset(arr, 0, sizeof(arr));
 
 	for (int i = 0; i < s.length(); i++)
 	{
-		arr[s[i] - 'A']++;
+		alpha[s[i] - 'A']++;
 	}
 
-	int odd = 0;
-	for (int i = 0; i < NUM; i++)
+	for (int i = 0; i < 26; i++)
 	{
-		if (arr[i] % 2 != 0) odd++;
+		int temp = alpha[i] % 2;
+		if (temp != 0)
+		{
+			cnt++;
+			center += i + 'A';
+		}
 	}
 
-	if (odd > 1) cout << "I'm Sorry Hansoo\n";
+	if (cnt > 1) cout << "I'm Sorry Hansoo\n";
 	else
 	{
-		string one = "";
-		string ret = "";
-		for (int i = 0; i < NUM; i++)
+		for (int i = 0; i < 26; i++)
 		{
-			if (arr[i] % 2 == 1)
+			for (int j = 0; j < alpha[i] / 2; j++)
 			{
-				one += i + 'A';
-				arr[i]--;
-			}
-			while (arr[i] != 0)
-			{
-				ret += i + 'A';
-				arr[i] -= 2;
+				back += i + 'A';
 			}
 		}
-		string back = ret;
+		front = back;
 		reverse(back.begin(), back.end());
-		ret = ret + one + back;
-
-		cout << ret << '\n';
+		ret = front + center + back;
+		cout << ret << "\n";
 	}
+
 	return 0;
 }
