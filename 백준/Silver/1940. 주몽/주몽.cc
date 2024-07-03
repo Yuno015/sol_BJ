@@ -2,26 +2,36 @@
 
 using namespace std;
 
+int N, M, ret;
+vector<int> v;
+
 int main(void)
 {
-	ios_base::sync_with_stdio(0);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
 
-	int N, M;
 	cin >> N >> M;
 
-	set<int> s;
-	int ret = 0;
 	for (int i = 0; i < N; i++)
 	{
-		int tmp;
-		cin >> tmp;
+		int temp;
+		cin >> temp;
+		v.push_back(temp);
+	}
+	sort(v.begin(), v.end());
 
-		if (s.find(M - tmp) != s.end()) ret++;
-		else s.insert(tmp);
+	int f = 0, b = N - 1;
+	while (f < b)
+	{
+		if (v[f] + v[b] == M)
+		{
+			ret++;
+			f++; b--;
+		}
+		else if (v[f] + v[b] < M) f++;
+		else if (v[f] + v[b] > M) b--;
 	}
 
-	cout << ret << '\n';
+	cout << ret;
 	return 0;
 }
