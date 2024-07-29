@@ -2,80 +2,79 @@
 
 using namespace std;
 
-int M, N, K;
-int arr[104][104];
-int visited[104][104];
-int tmp;
-vector<int> ret;
+int arr[102][102];
+int visited[102][102];
+int m, n, k;
 
-const int dy[] = { -1,0,1,0 };
-const int dx[] = { 0,1,0,-1 };
-
-void dfs(int y, int x)
-{
-	visited[y][x] = 1;
-	tmp++;
-	for(int i=0;i<4;i++)
-	{
-		int ny = y + dy[i];
-		int nx = x + dx[i];
-
-		if (ny < 0 || nx < 0 || ny >= M || ny >= N) continue;
-		if (arr[ny][nx] == 1 && visited[ny][nx] == 0)
-		{
-			dfs(ny, nx);
-		}
-	}
-
-	return;
-}
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
 
 int main(void)
 {
-	cin >> M >> N >> K;
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
 
-	for (int i = 0; i < M; i++)
+	cin >> m >> n >> k;
+
+	for (int i = 0; i < k; i++)
 	{
-		for (int j = 0; j < N; j++)
-		{
-			arr[i][j] = 1;
-		}
-	}
+		int x, y, xx, yy;
 
-	while (K--)
-	{
-		int sx, sy, ex, ey;
-		cin >> sx >> sy >> ex >> ey;
+		cin >> x >> y >> xx >> yy;
 
-		for (int i = sy; i < ey; i++)
+		for (int j = y; j < yy; j++)
 		{
-			for (int j = sx; j < ex; j++)
+			for (int k = x; k < xx; k++)
 			{
-				arr[i][j] = 0;
+				arr[j][k] = 1;
 			}
 		}
 	}
 
-	for (int i = 0; i < M; i++)
+	vector<int> result;
+
+	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < N; j++)
+		for (int j = 0; j < n; j++)
 		{
-			if (arr[i][j] == 1 && visited[i][j] == 0)
+			if (arr[i][j] == 0 && visited[i][j] == 0)
 			{
-				tmp = 0;
-				dfs(i, j);
-				ret.push_back(tmp);
+				int cnt = 1;
+				queue<pair<int, int>> q;
+				q.push({ i, j });
+				visited[i][j] = cnt;
+
+				while (!q.empty())
+				{
+					int y = q.front().first;
+					int x = q.front().second;
+					q.pop();
+
+					for (int k = 0; k < 4; k++)
+					{
+						int ny = y + dy[k];
+						int nx = x + dx[k];
+
+						if (ny < 0 || nx < 0 || ny >= m || nx >= n) continue;
+						if (arr[ny][nx] != 0 || visited[ny][nx] != 0) continue;
+						cnt++;
+						q.push({ ny, nx });
+						visited[ny][nx] = cnt;
+					}
+				}
+				result.push_back(cnt);
 			}
 		}
 	}
 
-	sort(ret.begin(), ret.end());
+	sort(result.begin(), result.end());
 
-	cout << ret.size() << "\n";
-	for (int i = 0; i < ret.size(); i++)
+	cout << result.size() << "\n";
+	for (int i = 0; i < result.size(); i++)
 	{
-		cout << ret[i] << " ";
+		cout << result[i] << " ";
 	}
+	cout << "\n";
 
 	return 0;
 }
