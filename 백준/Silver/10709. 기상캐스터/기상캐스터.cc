@@ -2,53 +2,61 @@
 
 using namespace std;
 
-char arr[104][204];
-int ret[104][204];
+char arr[102][102];
+int visited[102][102];
+int h, w;
+
+const int dy[] = { -1, 0, 1, 0 };
+const int dx[] = { 0, 1, 0, -1 };
+
 
 int main(void)
 {
-	int H, W;
-	cin >> H >> W;
+	ios::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0);
 
-	int cnt = 1;
+	cin >> h >> w;
 
-	memset(ret, -1, sizeof(ret));
-
-	for (int i = 0; i < H; i++)
+	for (int i = 0; i < h; i++)
 	{
-		for (int j = 0; j < W; j++)
+		for (int j = 0; j < w; j++)
 		{
 			cin >> arr[i][j];
-			if (arr[i][j] == 'c') ret[i][j] = 0;
+			if (arr[i][j] == '.')
+				visited[i][j] = -1;
+			else if (arr[i][j] == 'c')
+				visited[i][j] = 0;
 		}
 	}
 
-	for (int n = 0; n < W; n++)
+	int cnt = 0;
+	while (1)
 	{
-		for (int i = 0; i < H; i++)
+		cnt++;
+		if (cnt > w) break;
+		for (int i = w - 1; i >= 0; i--)
 		{
-			for (int j = W - 1; j > 0; j--)
+			for (int j = 0; j < h; j++)
 			{
-				arr[i][j] = arr[i][j - 1];
-			}
-			arr[i][0] = '.';
-
-			for (int j = 0; j < W; j++)
-			{
-				if (arr[i][j] == 'c' && ret[i][j] == -1)
+				if (i == 0) arr[j][i] = '.';
+				else
 				{
-					ret[i][j] = cnt;
+					arr[j][i] = arr[j][i - 1];
+
+					if (visited[j][i] == -1 && arr[j][i] == 'c')
+					{
+						visited[j][i] = cnt;
+					}
 				}
 			}
 		}
-		cnt++;
 	}
 
-	for (int i = 0; i < H; i++)
+	for (int i = 0; i < h; i++)
 	{
-		for (int j = 0; j < W; j++)
+		for (int j = 0; j < w; j++)
 		{
-			cout << ret[i][j] << " ";
+			cout << visited[i][j] << " ";
 		}
 		cout << "\n";
 	}
