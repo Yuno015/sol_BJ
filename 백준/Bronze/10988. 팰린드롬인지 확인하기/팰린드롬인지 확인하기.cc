@@ -2,23 +2,23 @@
 
 using namespace std;
 
+bool P = true;
+
 int main(void)
 {
-	bool isP = true;
 	string s;
-	cin >> s;
-	int len = s.length();
 
-	for (int i = 0; i < len / 2; i++)
+	cin >> s;
+
+	for (int i = 0; i < s.length() / 2; i++)
 	{
-		if (s[i] != s[len - (i + 1)])
+		if (s[i] != s[s.length() - 1 - i])
 		{
-			isP = false;
+			P = false;
 			break;
 		}
 	}
 
-	if (isP) cout << 1;
-	else cout << 0;
+	cout << P;
 	return 0;
 }
