@@ -2,28 +2,27 @@
 
 using namespace std;
 
-int N, K;
-int sum[100002];
-int ret = INT_MIN;
+int arr[100005];
 
 int main(void)
 {
-	cin >> N >> K;
+	int n, k;
+	cin >> n >> k;
 
-	for (int i = 1; i <= N; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		int temp;
-		cin >> temp;
-
-		sum[i] = sum[i - 1] + temp;
+		cin >> arr[i];
+		arr[i] += arr[i - 1];
 	}
 
-	for (int i = K; i <= N; i++)
+	int max = INT_MIN;
+
+	for (int i = k; i <= n; i++)
 	{
-		int temp = sum[i] - sum[i - K];
-		if (temp > ret) ret = temp;
+		int tmp = arr[i] - arr[i - k];
+		if (tmp > max) max = tmp;
 	}
 
-	cout << ret;
+	cout << max;
 	return 0;
 }
