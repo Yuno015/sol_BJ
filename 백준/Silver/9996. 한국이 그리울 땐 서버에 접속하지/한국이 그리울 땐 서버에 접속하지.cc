@@ -2,65 +2,41 @@
 
 using namespace std;
 
-int N, star;
-string s, b, e;
-vector<string> v;
-
 int main(void)
 {
-	cin >> N;
+	int n;
+	string s;
+	cin >> n;
 	cin >> s;
-	
-	for (int i = 0; i < N; i++)
-	{
-		string temp;
-		cin >> temp;
-		v.push_back(temp);
-	}
 
-	for (int i = 0; i < s.length(); i++)
+	int idx = s.find('*');
+	string f = s.substr(0, idx);
+	string b = s.substr(idx + 1, s.length());
+
+	for (int i = 0; i < n; i++)
 	{
-		if (s[i] == '*')
+		string tmp;
+		cin >> tmp;
+
+		if (tmp.length() < f.length() + b.length())
 		{
-			star = i;
-			break;
+			cout << "NE\n";
+			continue;
 		}
-	}
-
-	for (int i = 0; i < star; i++)
-	{
-		b += s[i];
-	}
-
-	for (int i = s.length() - 1; i > star; i--)
-	{
-		e += s[i];
-	}
-
-	for (int i = 0; i < v.size(); i++)
-	{
-		bool OK = true;
-		if (b.length() + e.length() > v[i].length()) OK = false;
+		bool P = true;
+		for (int j = 0; j < f.length(); j++)
+		{
+			if (tmp[j] != f[j]) P = false;
+		}
 		for (int j = 0; j < b.length(); j++)
 		{
-			if (v[i][j] != b[j])
-			{
-				OK = false;
-				break;
-			}
+			if (tmp[tmp.length() - b.length() + j] != b[j]) P = false;
 		}
 
-		for (int j = 0; j < e.length(); j++)
-		{
-			if (v[i][v[i].length() - 1 - j] != e[j])
-			{
-				OK = false;
-				break;
-			}
-		}
-		if (OK) cout << "DA\n";
+		if (P) cout << "DA\n";
 		else cout << "NE\n";
 	}
+
 
 	return 0;
 }
