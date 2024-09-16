@@ -2,22 +2,21 @@
 
 using namespace std;
 
-string s;
-int alpha[26];
+int arr[30];
 
 int main(void)
 {
+	string s;
 	cin >> s;
 
 	for (int i = 0; i < s.length(); i++)
 	{
-		alpha[s[i] - 'a']++;
+		arr[s[i] - 'a']++;
 	}
 
 	for (int i = 0; i < 26; i++)
 	{
-		cout << alpha[i] << " ";
+		cout << arr[i] << " ";
 	}
-
 	return 0;
 }
