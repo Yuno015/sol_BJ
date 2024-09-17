@@ -2,31 +2,35 @@
 
 using namespace std;
 
-int N, ret;
-string s;
+int n, m, cnt;
 
 int main(void)
 {
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	cin >> N;
+	cin >> n;
 
-	for (int i = 0; i < N; i++)
+	while (n--)
 	{
+		string s;
 		cin >> s;
+
 		stack<char> st;
-		for (int j = 0; j < s.length(); j++)
+
+		for (int i = 0; i < s.length(); i++)
 		{
-			if (st.empty()) st.push(s[j]);
+			if (st.empty()) st.push(s[i]);
 			else
 			{
-				if (st.top() == s[j]) st.pop();
-				else st.push(s[j]);
+				if (st.top() == s[i]) st.pop();
+				else st.push(s[i]);
 			}
 		}
-		if (st.empty()) ret++;
+
+		if (st.empty()) cnt++;
 	}
-	cout << ret;
+
+	cout << cnt;
 	return 0;
 }
